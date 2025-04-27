@@ -1,10 +1,11 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     const uploadForm = document.getElementById('upload-form');
     const fileInput = document.getElementById('file-input');
     const resultDiv = document.getElementById('result');
+    const submitButton = document.getElementById('submit-button');
 
-    uploadForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
+    uploadForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
         const file = fileInput.files[0];
         if (!file) {
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('file', file);
 
         resultDiv.innerText = '⌛ interpretuję twój plik...';
+        submitButton.disabled = true;
 
         try {
             const response = await fetch('/api/interpret', {
@@ -32,6 +34,8 @@ document.addEventListener('DOMContentLoaded', function () {
         } catch (error) {
             console.error(error);
             resultDiv.innerText = '❌ coś poszło nie tak, spróbuj ponownie później.';
+        } finally {
+            submitButton.disabled = false;
         }
     });
 });
